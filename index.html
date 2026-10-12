@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EM STORE | Top Up Game & Voucher Instant 24/7</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ==========================================================================
+           1. VARIABLE & RESET (TEMA HITAM, MERAH, PUTIH GAMING)
+           ========================================================================== */
+        :root {
+            --bg-dark: #0a0a0c;
+            --bg-card: #141419;
+            --bg-card-hover: #1c1c24;
+            --primary-red: #ff003c;
+            --primary-red-glow: rgba(255, 0, 60, 0.4);
+            --text-white: #ffffff;
+            --text-muted: #a0a0ab;
+            --border-color: #2a2a35;
+            --font-heading: 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* ==========================================================================
+           2. HEADER & NAVBAR
+           ========================================================================== */
+        header {
+            background: rgba(10, 10, 12, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary-red);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .brand-logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--text-white);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-logo span {
+            color: var(--primary-red);
+            text-shadow: 0 0 10px var(--primary-red-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-red);
+        }
+
+        /* ==========================================================================
+           3. BANNER / HERO SECTION
+           ========================================================================== */
+        .hero {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .banner {
+            background: linear-gradient(135deg, rgba(255, 0, 60, 0.2) 0%, rgba(20, 20, 25, 0.9) 100%), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80') center/cover;
+            border-radius: 12px;
+            padding: 40px 30px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .banner h1 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .banner p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* ==========================================================================
+           4. GAME SELECTION GRID
+           ========================================================================== */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 4px solid var(--primary-red);
+            padding-left: 10px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .game-card:hover, .game-card.active {
+            border-color: var(--primary-red);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--primary-red-glow);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .game-card .title {
+            padding: 12px 5px;
+            font-weight: 700;
+            font-size: 1rem;
+            background: var(--bg-card);
+        }
+
+        /* ==========================================================================
+           5. FORM TRANSAKSI (TOP-UP FORM)
+           ========================================================================== */
+        .topup-form-section {
+            display: none; /* Disembunyikan sampai game dipilih */
+            margin-top: 40px;
+        }
+
+        .form-step {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            background: var(--primary-red);
+            color: var(--text-white);
+            font-family: var(--font-heading);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-control {
+            flex: 1;
+            min-width: 200px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: var(--text-white);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-control:focus {
+            border-color: var(--primary-red);
+        }
+
+        /* Nominal Grid */
+        .nominal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .item-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover, .item-card.active {
+            border-color: var(--primary-red);
+            background: var(--bg-card-hover);
+        }
+
+        .item-card .item-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .item-card .item-price {
+            color: var(--primary-red);
+            font-size: 1rem;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* Payment Methods Grid */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .payment-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .payment-card:hover, .payment-card.active {
+            border-color: var(--primary-red);
+            background: var(--bg-card-hover);
+        }
+
+        /* Checkout Button */
+        .btn-submit {
+            width: 100%;
+            background: var(--primary-red);
+            color: var(--text-white);
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 15px var(--primary-red-glow);
+        }
+
+        .btn-submit:hover {
+            background: #d60032;
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.8);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 60px;
+            color: var(--text-muted);
+        }
+
+        /* User ID Checker Indicator */
+        #user-check-result {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="navbar">
+            <a href="#" class="brand-logo">
+                <i class="fa-solid fa-gamepad"></i> EM <span>STORE</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#"><i class="fa-solid fa-house"></i> Beranda</a></li>
+                <li><a href="#"><i class="fa-solid fa-magnifying-glass"></i> Cek Pesanan</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- BANNER HERO -->
+    <section class="hero">
+        <div class="banner">
+            <h1>TOP UP Instant & Legal</h1>
+            <p>Layanan pengisian item game terpercaya, buka 24 jam dengan harga paling bersaing.</p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        
+        <!-- STEP 1: PILIH GAME -->
+        <h2 class="section-title"><i class="fa-solid fa-fire"></i> Pilih Game Favorit</h2>
+        <div class="game-grid">
+            <div class="game-card" onclick="selectGame(this, 'Mobile Legends')">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80" alt="MLBB">
+                <div class="title">Mobile Legends</div>
+            </div>
+            <div class="game-card" onclick="selectGame(this, 'Free Fire')">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80" alt="FF">
+                <div class="title">Free Fire</div>
+            </div>
+            <div class="game-card" onclick="selectGame(this, 'PUBG Mobile')">
+                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=300&q=80" alt="PUBGM">
+                <div class="title">PUBG Mobile</div>
+            </div>
+            <div class="game-card" onclick="selectGame(this, 'Honor of Kings')">
+                <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=300&q=80" alt="HOK">
+                <div class="title">Honor of Kings</div>
+            </div>
+        </div>
+
+        <!-- FORM TOP UP SECTIONS -->
+        <div id="topup-form" class="topup-form-section">
+            
+            <!-- STEP 2: MASUKKAN DATA -->
+            <div class="form-step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <h3>Masukkan Data Akun</h3>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="user-id" class="input-control" placeholder="Masukkan User ID" onkeyup="checkAccount()">
+                    <input type="text" id="zone-id" class="input-control" placeholder="Zone / Server ID">
+                </div>
+                <div id="user-check-result"></div>
+            </div>
+
+            <!-- STEP 3: PILIH NOMINAL -->
+            <div class="form-step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <h3>Pilih Nominal Top Up</h3>
+                </div>
+                <div class="nominal-grid">
+                    <div class="item-card" onclick="selectItem(this, '86 Diamonds', 20000)">
+                        <div class="item-name">86 Diamonds</div>
+                        <div class="item-price">Rp 20.000</div>
+                    </div>
+                    <div class="item-card" onclick="selectItem(this, '140 Diamonds', 14000)">
+                        <div class="item-name">172 Diamonds</div>
+                        <div class="item-price">Rp 40.000</div>
+                    </div>
+                    <div class="item-card" onclick="selectItem(this, '257 Diamonds', 60000)">
+                        <div class="item-name">257 Diamonds</div>
+                        <div class="item-price">Rp 60.000</div>
+                    </div>
+                    <div class="item-card" onclick="selectItem(this, '706 Diamonds', 160000)">
+                        <div class="item-name">706 Diamonds</div>
+                        <div class="item-price">Rp 160.000</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: PILIH PEMBAYARAN -->
+            <div class="form-step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <h3>Pilih Metode Pembayaran</h3>
+                </div>
+                <div class="payment-grid">
+                    <div class="payment-card" onclick="selectPayment(this, 'QRIS Instant')">
+                        <div>
+                            <strong>QRIS (All E-Wallet)</strong><br>
+                            <small style="color: var(--text-muted)">Bebas Biaya Admin</small>
+                        </div>
+                        <i class="fa-solid fa-qrcode fa-xl"></i>
+                    </div>
+                    <div class="payment-card" onclick="selectPayment(this, 'DANA')">
+                        <div>
+                            <strong>DANA</strong><br>
+                            <small style="color: var(--text-muted)">Proses Otomatis</small>
+                        </div>
+                        <i class="fa-solid fa-wallet fa-xl"></i>
+                    </div>
+                    <div class="payment-card" onclick="selectPayment(this, 'BCA Virtual Account')">
+                        <div>
+                            <strong>BCA Virtual Account</strong><br>
+                            <small style="color: var(--text-muted)">Verifikasi Otomatis</small>
+                        </div>
+                        <i class="fa-solid fa-building-columns fa-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 5: TOMBOL BELI -->
+            <button class="btn-submit" onclick="submitOrder()">
+                <i class="fa-solid fa-bolt"></i> Beli Sekarang
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 <strong>EM STORE</strong>. All Rights Reserved.</p>
+        <p style="font-size:0.8rem; margin-top:5px;">Platform Top-Up Game Tercepat & Terpercaya.</p>
+    </footer>
+
+    <!-- JAVASCRIPT SYSTEM -->
+    <script>
+        // Data State Transaksi
+        let selectedGameData = '';
+        let selectedItemData = { name: '', price: 0 };
+        let selectedPaymentData = '';
+
+        // Function Pilih Game
+        function selectGame(element, gameName) {
+            document.querySelectorAll('.game-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+            selectedGameData = gameName;
+            
+            // Tampilkan Form Top Up
+            document.getElementById('topup-form').style.display = 'block';
+            
+            // Scroll halus ke arah form
+            document.getElementById('topup-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Simulasi Pengecekan Nickname
+        function checkAccount() {
+            const userId = document.getElementById('user-id').value;
+            const resultDiv = document.getElementById('user-check-result');
+            
+            if(userId.length >= 5) {
+                resultDiv.style.color = '#00ff88';
+                resultDiv.innerHTML = '<i class="fa-solid fa-circle-check"></i> Account Found: ProGamer_2026';
+            } else if(userId.length > 0) {
+                resultDiv.style.color = 'var(--text-muted)';
+                resultDiv.innerText = 'Memeriksa ID...';
+            } else {
+                resultDiv.innerText = '';
+            }
+        }
+
+        // Function Pilih Nominal Item
+        function selectItem(element, name, price) {
+            document.querySelectorAll('.item-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+            selectedItemData = { name: name, price: price };
+        }
+
+        // Function Pilih Pembayaran
+        function selectPayment(element, method) {
+            document.querySelectorAll('.payment-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+            selectedPaymentData = method;
+        }
+
+        // Submit Order Modal/Alert
+        function submitOrder() {
+            const userId = document.getElementById('user-id').value;
+
+            // Validasi Input
+            if (!userId) {
+                alert('Silakan masukkan User ID akun Anda!');
+                return;
+            }
+            if (!selectedItemData.name) {
+                alert('Silakan pilih nominal produk yang ingin dibeli!');
+                return;
+            }
+            if (!selectedPaymentData) {
+                alert('Silakan pilih metode pembayaran!');
+                return;
+            }
+
+            // Ringkasan Pesanan (Konfirmasi)
+            const summary = `
+============================
+      RINGKASAN PESANAN EM STORE
+============================
+Game     : ${selectedGameData}
+User ID  : ${userId}
+Item     : ${selectedItemData.name}
+Metode   : ${selectedPaymentData}
+Total    : Rp ${selectedItemData.price.toLocaleString('id-ID')}
+
+Lanjutkan ke Pembayaran?
+            `;
+
+            if (confirm(summary)) {
+                alert('Pesanan berhasil dibuat! Mengalihkan ke halaman pembayaran...');
+            }
+        }
+    </script>
+</body>
+</html>
